@@ -1,12 +1,15 @@
 package com.ernestovaldez.androidapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +21,12 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Student student;
-    List<Student> itemList;
+    ArrayList<Student> itemList;
     String jsonResponse;
     private static Context context;
 
@@ -112,6 +114,22 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(context,"Data received from server", Toast.LENGTH_LONG).show();
 
+            if (jsonArray.length() == 0){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setTitle(R.string.app_name)
+                        .setMessage("No records found!")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        });
+
+                builder.create().show();
+                return;
+            }
+
             RecyclerView recycler = findViewById(R.id.rv1);
             recycler.setHasFixedSize(true);
 
@@ -130,9 +148,9 @@ public class MainActivity extends AppCompatActivity {
                 itemList.add(student);
             }
 
-
             RecyclerView.Adapter myAdapter = new ListAdapter(itemList);
             recycler.setAdapter(myAdapter);
+
 
         } catch (Throwable t) {
             Log.e("Error", "Could not parse malformed data: \"" + t.getLocalizedMessage() + "\"");

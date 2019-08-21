@@ -8,45 +8,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
-    private List<Student> mDataset;
-    private int cont = 0;
-    private ViewGroup _parent;
-    View view;
+    private ArrayList<Student> mDataset;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        TextView txt1;
+        TextView txt2;
         public MyViewHolder(View v) {
             super(v);
+            txt1 = v.findViewById(R.id.txtName);
+            txt2 = v.findViewById(R.id.txtAge);
         }
 
     }
 
-    public ListAdapter(List<Student> myDataset) {
+    public ListAdapter(ArrayList<Student> myDataset) {
         mDataset = myDataset;
     }
 
     @Override
-    public ListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        _parent = parent;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cellcomponent, _parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.cellcomponent, parent, false);
 
-        TextView txt1 = view.findViewById(R.id.txtName);
-        txt1.setText("Name: " + mDataset.get(cont).Name);
-
-        TextView txt2 = view.findViewById(R.id.txtAge);
-        txt2.setText("Age: " + mDataset.get(cont).Age);
-
-        cont++;
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+        holder.txt1.setText("Name: " + mDataset.get(position).Name);
+        holder.txt2.setText("Age: " + mDataset.get(position).Age);
     }
 
     @Override
